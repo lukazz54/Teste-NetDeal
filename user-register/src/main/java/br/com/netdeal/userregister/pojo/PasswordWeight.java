@@ -1,4 +1,4 @@
-package br.com.netdeal.userregister.entity;
+package br.com.netdeal.userregister.pojo;
 
 import br.com.netdeal.userregister.enums.PasswordConfidencyEnum;
 import lombok.Data;

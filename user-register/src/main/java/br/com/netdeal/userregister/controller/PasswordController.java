@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.netdeal.userregister.entity.PasswordWeight;
 import br.com.netdeal.userregister.model.PasswordRules;
+import br.com.netdeal.userregister.pojo.PasswordWeight;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

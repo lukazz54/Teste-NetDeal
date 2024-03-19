@@ -6,8 +6,8 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import br.com.netdeal.userregister.entity.PasswordWeight;
 import br.com.netdeal.userregister.enums.PasswordConfidencyEnum;
+import br.com.netdeal.userregister.pojo.PasswordWeight;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

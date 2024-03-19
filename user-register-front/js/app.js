@@ -54,7 +54,7 @@ app.controller('listUsers', ['$scope', '$http', ($scope, $http)=> {
         var user = {
             name: $scope.form.name,
             password: $scope.form.password,
-            idHierarchical: parseInt($scope.form.hierarchicalUser)
+            idHierarchical: parseInt(document.getElementById("hierarchical-user").value)
         }
 
         $http.post(`${API_URL}/user/insert-new-user`, user)
@@ -71,7 +71,7 @@ app.controller('listUsers', ['$scope', '$http', ($scope, $http)=> {
             id: $scope.requestUser.id,
             name: $scope.form.name,
             password: $scope.requestUser.password,
-            idHierarchical: $scope.form.hierarchicalUser,
+            idHierarchical: parseInt(document.getElementById('hierarchical-user').value),
             passwordScore: $scope.requestUser.passwordScore,
             passwordWeight: $scope.requestUser.passwordWeight
         }
@@ -114,6 +114,13 @@ app.controller('listUsers', ['$scope', '$http', ($scope, $http)=> {
         $scope.submitInsert = user ? false : true;
         $scope.requestUser = user;
 
+        
+        if(user && user.idHierarchical) {
+            document.getElementById('hierarchical-user').value = user.idHierarchical;
+        } else {
+            document.getElementById('hierarchical-user').value = "";
+        }
+
     }
 
     $scope.showPopUpDelete = (user) => {
@@ -138,7 +145,6 @@ app.controller('listUsers', ['$scope', '$http', ($scope, $http)=> {
         var currentPass = $scope.form.password;
         $http.post(`${API_URL}/password/validate-password-weight`, currentPass)
            .then((response) => {
-            console.log(response)
             $scope.passValidators = {
                 classNumber: response.data.numbers ? 'requirement-passed' : 'requirement-refused',
                 iconNumber: response.data.numbers ? 'fa-solid fa-circle-check': 'fa-solid fa-circle-xmark',

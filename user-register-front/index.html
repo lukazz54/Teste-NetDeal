@@ -68,7 +68,8 @@
                         <h3>{{popUp_title}}</h3>
                         <input type="text" placeholder="NOME" ng-model="form.name" required/>
                         <input type="password" ng-change="validatePass()" ng-model-options="{debounce:500}" placeholder="SENHA" ng-model="form.password" ng-show="showPassword" autocomplete="false">
-                        <select class="hierarchical-user-select" ng-model="form.hierarchicalUser">
+                        <select id="hierarchical-user" class="hierarchical-user-select">
+                            <option value="" class="hierarchical-user-options">RESPONSÁVEL</option>
                             <option value="{{user.id}}" ng-repeat="user in users" class="hierarchical-user-options">{{user.name}}</option>
                         </select>
                         <div class="pass-requirements" ng-show="showPassword">
