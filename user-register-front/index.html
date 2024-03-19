@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>NetDeal - Registro de Usuarios</title>
+    </head>
+    <link rel="stylesheet" href="css/style.css"> 
+    <body ng-app="app" ng-controller="listUsers">
+        <script src="https://kit.fontawesome.com/4c7c692cbd.js" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+        <script src="js/app.js"></script>
+        <header>
+            <div class="header-divider">
+                <a ng-click="showPopUpUser()">Adicionar Usuário</a>
+            </div>
+        </header>
+
+        <main ng-init="showUsers()">
+            <div class="card fix-thead">
+                <table class="table_users">
+                    <thead>
+                        <th class="table_column_header_users">
+                            Nome
+                        </th>
+                        <th class="table_column_header_users">
+                            Score
+                        </th>
+                        <th class="table_column_header_users">
+                            Força
+                        </th>
+                        <th class="table_column_header_users">
+                            Ações
+                        </th>
+                    </thead>
+                    <tbody >
+                        <tr class="table_row__users" 
+                            ng-repeat="user in users"> <!-- ng-repeater -->
+                            <td class="table_column_users" ng-class="hasHierarchy(user)">
+                                {{user.name}}
+                            </td>
+                            <td class="table_column_users">
+                                {{user.passwordScore}} %
+                            </td>
+                            <td class="table_column_users">
+                                <div class="password-weight" ng-class="selectPasswordWeight(user)">
+                                    {{user.passwordWeight}}
+                                </div>
+                            </td>
+                            <td class="table_column_users">
+                                <div class="table-actions">
+                                    <i class="fa-solid fa-pen-to-square" ng-click="showPopUpUser(user)"></i>
+                                    <i class="fa-solid fa-trash" ng-click="showPopUpDelete(user)"></i>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+        <div ng-show="showPopUp" class="pop-up">
+             <div class="card">
+                <div class="user-form">
+                    <div class="close-popUp">
+                        <i class="fa-solid fa-xmark" ng-click="closePopUp()"></i>
+                    </div>
+                    <form ng-submit="submitUserRequest()">
+                        <h3>{{popUp_title}}</h3>
+                        <input type="text" placeholder="NOME" ng-model="form.name" required/>
+                        <input type="password" ng-change="validatePass()" ng-model-options="{debounce:500}" placeholder="SENHA" ng-model="form.password" ng-show="showPassword" autocomplete="false">
+                        <select class="hierarchical-user-select" ng-model="form.hierarchicalUser">
+                            <option value="{{user.id}}" ng-repeat="user in users" class="hierarchical-user-options">{{user.name}}</option>
+                        </select>
+                        <div class="pass-requirements" ng-show="showPassword">
+                            <div class="requirement" ng-class="passValidators.classMinimumCaractes"><span><i ng-class="passValidators.iconMinimumCaractes"></i></span><h6>Mínimo de 8 caracteres</h6></div> 
+                            <div class="requirement" ng-class="passValidators.classLowerCase"><span><i ng-class="passValidators.iconLowerCase"></i></span><h6>Contêm letra minúscula</h6></div>
+                            <div class="requirement" ng-class="passValidators.classUpperCase"><span><i ng-class="passValidators.iconUpperCase"></i></span><h6>Contêm letra maiúscula</h6></div>
+                            <div class="requirement" ng-class="passValidators.classSymbols"><span><i ng-class="passValidators.iconSymbols"></i></span><h6>Contêm caracteres especiais</h6></div>
+                            <div class="requirement" ng-class="passValidators.classNumber"><span><i ng-class="passValidators.iconNumber"></i></span><h6>Contem números</h6></div>
+                        </div>
+                        <button type="submit">Salvar</button>
+                    </form>
+                </div>
+             </div>
+        </div>
+
+        <div ng-show="showDeletePopUp" class="pop-up">
+            <div class="card">
+                <div class="delete-popUp">
+                    <div class="close-popUp">
+                        <i class="fa-solid fa-xmark" ng-click="closeDeletePopUp()"></i>
+                    </div>
+                    <div class="delete-infos">
+                        <h3>Excluir Usuário</h3>
+                        <h4>Tem certeza que deseja excluir o usuário : </h4>
+                        <h4>{{name}}</h4>
+                        <div class="delete-options">
+                            <a role="button" class="delete-cancel-button" ng-click="closeDeletePopUp()">Cancelar</a>
+                            <a role="button" class="delete-confirm-button" ng-click="deleteUser(user)">Confirmar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+
+        </footer>
+    </body>
+</html>
