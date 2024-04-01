@@ -1,7 +1,6 @@
 package br.com.netdeal.userregister.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +18,6 @@ public class PasswordController {
 	private PasswordRules passwordRules;
 
 	@PostMapping("/validate-password-weight")
-	@CrossOrigin(origins = "http://localhost")
 	private ResponseEntity<PasswordWeight> validatePasswordWeight(@RequestBody String password) {
 		
 		return ResponseEntity.ok(passwordRules.scorePasswordWeight(password));

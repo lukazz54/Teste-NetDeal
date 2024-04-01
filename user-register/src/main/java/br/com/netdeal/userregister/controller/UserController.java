@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,14 +29,12 @@ public class UserController {
 	private PasswordRules passwordRules;
 	
 	@GetMapping("/get-all-user")
-	@CrossOrigin(origins = "http://localhost")
 	private ResponseEntity<List<User>> getUsers() {
 		return userService.getUsers();
 	}
 	
 	
 	@PostMapping("/insert-new-user")
-	@CrossOrigin(origins = "http://localhost")
 	private ResponseEntity<List<User>> insertNewUser(@RequestBody User user) {
 		PasswordWeight scorePasswordWeight = passwordRules.scorePasswordWeight(user.getPassword());
 		
@@ -55,7 +52,6 @@ public class UserController {
 	}
 	
 	@PutMapping("/update-user")
-	@CrossOrigin(origins = "http://localhost")
 	private ResponseEntity<List<User>> updateUser(@RequestBody User user) {
 		ResponseEntity<String> updateUser = userService.updateUser(user);
 		
@@ -68,8 +64,7 @@ public class UserController {
 	
 	
 	@DeleteMapping("/delete-user/{userId}")
-	@CrossOrigin(origins = "http://localhost")
-	private ResponseEntity<List<User>> deleteUser(@PathVariable Long userId) {
+	private ResponseEntity<List<User>> deleteUser(@PathVariable String userId) {
 		ResponseEntity<String> deleteUser = userService.deleteUser(userId);
 		
 		if(deleteUser.getStatusCode().is2xxSuccessful()) {

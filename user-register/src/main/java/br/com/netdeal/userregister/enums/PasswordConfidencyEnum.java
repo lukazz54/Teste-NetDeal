@@ -6,7 +6,7 @@ public enum PasswordConfidencyEnum {
 	VERY_WEAK ("MUITO FRACO"),
 	WEAK ("FRACO"),
 	MEDIUM ("MEDIO"),
-	STRONG ("Forte"),
+	STRONG ("FORTE"),
 	VERY_STRONG ("MUITO_FORTE");
 	
 	public String getPasswordConfidency;
