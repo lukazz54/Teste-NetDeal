@@ -17,10 +17,10 @@ public class PasswordController {
 	
 	private PasswordRules passwordRules;
 
-	@PostMapping("/validate-password-weight")
+	@PostMapping("/validate-password")
 	private ResponseEntity<PasswordWeight> validatePasswordWeight(@RequestBody String password) {
 		
-		return ResponseEntity.ok(passwordRules.scorePasswordWeight(password));
+		return ResponseEntity.ok(passwordRules.validatePasswordWeight(password));
 	}
 	
 }

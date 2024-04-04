@@ -20,69 +20,87 @@ public class PasswordRules {
 		return encoder.encode(password);
 	}
 	
-	public PasswordWeight scorePasswordWeight(String password) {
+	public PasswordWeight validatePasswordWeight(String password) {
 	
-		var score = 0;
 		var passwordWeight = new PasswordWeight();
 		
 		//iniciando validações de senha 
 		
 		if(Strings.isBlank(password)) {
-			passwordWeight.setPasswordConfidency(setPasswordConfidency(passwordWeight, ""));
+			passwordWeight.setPasswordConfidency(PasswordConfidencyEnum.TOO_SHORT);
 			return passwordWeight;
 		}
 		
-		score = password.length() * 4;
+		validateLength(password, passwordWeight);
+		validateUppercase(password, passwordWeight);
+		validateLowercase(password, passwordWeight);
+		validateNumber(password, passwordWeight);
+		validateSpecialCaracters(password, passwordWeight);
 		
+		validateComplexity(passwordWeight);
+		
+		setScore(passwordWeight, password);
+		validatePasswordConfidency(passwordWeight, password);
+
+		return passwordWeight;
+	}
+
+	private void validateLength(String password, PasswordWeight passwordWeight) {
 		if(password.length() >= 8) {
 			passwordWeight.setMinimumCaracteres(true);
 		}
 		
+		passwordWeight.setScore(password.length() * 4);
+	}
+	
+	private void validateUppercase(String password, PasswordWeight passwordWeight) {
 		if(Pattern.compile("[A-Z]").matcher(password).find()) {
 			int countUpperLetters = (int) Pattern.compile("[A-Z]").matcher(password).results().count();
 			passwordWeight.setUppercaseLetters(true);
 			
-			score += (password.length() - countUpperLetters) * 2;
+			int score = passwordWeight.getScore();
+			passwordWeight.setScore(score += (password.length() - countUpperLetters) * 2);
 		}
-		
+	}
+
+	private void validateLowercase(String password, PasswordWeight passwordWeight) {
 		if(Pattern.compile("[a-z]").matcher(password).find()) {
 			int countLowerLetters = (int) Pattern.compile("[a-z]").matcher(password).results().count();
 			passwordWeight.setLowerCaseLetters(true);
 			
-			score += (password.length() - countLowerLetters) * 2;
+			int score = passwordWeight.getScore();
+			passwordWeight.setScore(score += (password.length() - countLowerLetters) * 2);
 		}
-		
+	}
+	
+	private void validateNumber(String password, PasswordWeight passwordWeight) {
 		if(Pattern.compile("\\d").matcher(password).find()) {
 			int countNumbers = (int) Pattern.compile("\\d").matcher(password).results().count();
 			passwordWeight.setNumbers(true);
 			
-			score += countNumbers * 4;
+			int score = passwordWeight.getScore();
+			passwordWeight.setScore(score += countNumbers * 4);
 		}
-		
+	}
+	
+	private void validateSpecialCaracters(String password, PasswordWeight passwordWeight) {
 		if(Pattern.compile("\\W").matcher(password).find()) {
 			int countSymbols = (int) Pattern.compile("\\W").matcher(password).results().count();
 			passwordWeight.setSymbols(true);
 			
-			score += countSymbols * 6;
+			int score = passwordWeight.getScore();
+			passwordWeight.setScore(score += countSymbols * 6);
 		}
-		
-		passwordWeight.setComplexity(setComplexity(passwordWeight));
-		passwordWeight.setScore(setScore(passwordWeight, score, password));
-		passwordWeight.setPasswordConfidency(setPasswordConfidency(passwordWeight, password));
+	}
 
-		return passwordWeight;
-	}
 	
-	private int setScore(PasswordWeight passwordWeight, int score, String password) {
-		
+	private void setScore(PasswordWeight passwordWeight, String password) {
 		if(!passwordWeight.isComplexity() && password.length() > 1) {
-			return 0;
+			passwordWeight.setScore(0);
 		}
-		
-		return score;
 	}
 	
-	private boolean setComplexity(PasswordWeight passwordWeight) {
+	private void validateComplexity(PasswordWeight passwordWeight) {
 		
 		var requirements = 0;
 		
@@ -93,29 +111,25 @@ public class PasswordRules {
 		requirements = passwordWeight.isSymbols() ? requirements += 1 : requirements;
 		
 		if(requirements > 2)
-			return true;
-		
-		return false;
+			passwordWeight.setComplexity(true);
 	}
 	
-	private PasswordConfidencyEnum setPasswordConfidency(PasswordWeight passwordWeight, String password) {
+	private void validatePasswordConfidency(PasswordWeight passwordWeight, String password) {
 		
 		if(!passwordWeight.isComplexity() && password.length() >= 1) 
-			return PasswordConfidencyEnum.VERY_WEAK;
+			passwordWeight.setPasswordConfidency(PasswordConfidencyEnum.VERY_WEAK);
 		
 		if(passwordWeight.getScore() > 20 && passwordWeight.getScore() < 40)
-			return PasswordConfidencyEnum.WEAK;
+			passwordWeight.setPasswordConfidency(PasswordConfidencyEnum.WEAK);
 		
 		if(passwordWeight.getScore() >= 40 && passwordWeight.getScore() < 60) 
-			return PasswordConfidencyEnum.MEDIUM;
+			passwordWeight.setPasswordConfidency(PasswordConfidencyEnum.MEDIUM);
 		
 		if(passwordWeight.getScore() >= 60 && passwordWeight.getScore() < 80) 
-			return PasswordConfidencyEnum.STRONG;
+			passwordWeight.setPasswordConfidency(PasswordConfidencyEnum.STRONG);
 
 		if(passwordWeight.getScore() >= 80) 
-			return PasswordConfidencyEnum.VERY_STRONG;
-		
-		return PasswordConfidencyEnum.TOO_SHORT;
+			passwordWeight.setPasswordConfidency(PasswordConfidencyEnum.VERY_STRONG);
 		
 	}
 }

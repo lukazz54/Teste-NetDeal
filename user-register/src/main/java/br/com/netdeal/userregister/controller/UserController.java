@@ -36,7 +36,7 @@ public class UserController {
 	
 	@PostMapping("/insert-new-user")
 	private ResponseEntity<List<User>> insertNewUser(@RequestBody User user) {
-		PasswordWeight scorePasswordWeight = passwordRules.scorePasswordWeight(user.getPassword());
+		PasswordWeight scorePasswordWeight = passwordRules.validatePasswordWeight(user.getPassword());
 		
 		user.setPassword(passwordRules.encoderPassword(user.getPassword()));
 		user.setPasswordScore(scorePasswordWeight.getScore());
@@ -64,7 +64,7 @@ public class UserController {
 	
 	
 	@DeleteMapping("/delete-user/{userId}")
-	private ResponseEntity<List<User>> deleteUser(@PathVariable String userId) {
+	private ResponseEntity<List<User>> deleteUser(@PathVariable Long userId) {
 		ResponseEntity<String> deleteUser = userService.deleteUser(userId);
 		
 		if(deleteUser.getStatusCode().is2xxSuccessful()) {
